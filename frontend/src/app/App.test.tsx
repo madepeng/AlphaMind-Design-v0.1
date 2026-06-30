@@ -9,6 +9,10 @@ vi.mock("../pages/Home/HomePage", () => ({
   HomePage: () => <h1>Home Dashboard</h1>,
 }));
 
+vi.mock("../pages/Watchlist/WatchlistPage", () => ({
+  WatchlistPage: () => <h1>Watchlist Page</h1>,
+}));
+
 afterEach(cleanup);
 
 describe("App", () => {
@@ -21,6 +25,18 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", { name: "Home Dashboard" }),
+    ).toBeInTheDocument();
+  });
+
+  it("routes to Watchlist", () => {
+    render(
+      <MemoryRouter initialEntries={["/watchlist"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Watchlist Page" }),
     ).toBeInTheDocument();
   });
 });

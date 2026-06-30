@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getHome } from "../../api/homeApi";
@@ -30,6 +31,14 @@ const mockedGetHome = vi.mocked(getHome);
 
 afterEach(cleanup);
 
+function renderHomePage() {
+  return render(
+    <MemoryRouter>
+      <HomePage />
+    </MemoryRouter>,
+  );
+}
+
 describe("HomePage", () => {
   beforeEach(() => {
     mockedGetHome.mockReset();
@@ -38,7 +47,7 @@ describe("HomePage", () => {
   it("renders the loading skeleton", () => {
     mockedGetHome.mockReturnValue(new Promise(() => undefined));
 
-    render(<HomePage />);
+    renderHomePage();
 
     expect(
       screen.getByLabelText("Loading Home dashboard"),
@@ -51,7 +60,7 @@ describe("HomePage", () => {
       .mockRejectedValueOnce(new Error("Unavailable"))
       .mockResolvedValueOnce(mockHomeData);
 
-    render(<HomePage />);
+    renderHomePage();
 
     fireEvent.click(
       await screen.findByRole("button", { name: "Retry" }),
@@ -68,7 +77,7 @@ describe("HomePage", () => {
       summary: "",
     });
 
-    render(<HomePage />);
+    renderHomePage();
 
     expect(
       await screen.findByText("Today has no major market events."),
@@ -81,7 +90,7 @@ describe("HomePage", () => {
   it("renders market, events, and the right panel summary", async () => {
     mockedGetHome.mockResolvedValue(mockHomeData);
 
-    render(<HomePage />);
+    renderHomePage();
 
     expect(await screen.findByText("Nasdaq")).toBeInTheDocument();
     expect(screen.getByText("S&P500")).toBeInTheDocument();
@@ -96,22 +105,25 @@ describe("HomePage", () => {
   it("shows Coming Soon when an event is selected", async () => {
     mockedGetHome.mockResolvedValue(mockHomeData);
 
-    render(<HomePage />);
+    renderHomePage();
 
     fireEvent.click(await screen.findByText("Micron Earnings"));
 
     expect(screen.getByRole("status")).toHaveTextContent("Coming Soon");
   });
 
-  it("shows only Home as enabled in the Sidebar", async () => {
+  it("shows Home and Watchlist as enabled in the Sidebar", async () => {
     mockedGetHome.mockResolvedValue(mockHomeData);
 
-    render(<HomePage />);
+    renderHomePage();
 
     expect(
-      await screen.findByRole("button", { name: "Home" }),
-    ).toBeEnabled();
-    expect(screen.getByRole("button", { name: "Watchlist" })).toBeDisabled();
+      await screen.findByRole("link", { name: "Home" }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Watchlist" })).toHaveAttribute(
+      "href",
+      "/watchlist",
+    );
     expect(screen.getByRole("button", { name: "Journal" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Settings" })).toBeDisabled();
   });

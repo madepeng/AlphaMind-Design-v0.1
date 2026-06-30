@@ -6,5 +6,20 @@ from app.schemas.home import (
     HomeResponseDTO,
     MarketDTO,
 )
+from app.schemas.watchlist import (
+    SuccessResponseDTO,
+    WatchlistCreateDTO,
+    WatchlistItemDTO,
+    WatchlistResponseDTO,
+)
 
-__all__ = ["HomeDataDTO", "HomeEventDTO", "HomeResponseDTO", "MarketDTO"]
+__all__ = [
+    "HomeDataDTO",
+    "HomeEventDTO",
+    "HomeResponseDTO",
+    "MarketDTO",
+    "SuccessResponseDTO",
+    "WatchlistCreateDTO",
+    "WatchlistItemDTO",
+    "WatchlistResponseDTO",
+]

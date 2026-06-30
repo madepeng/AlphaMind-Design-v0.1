@@ -1,4 +1,4 @@
-from sqlmodel import select
+from sqlmodel import col, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models import WatchlistModel
@@ -10,23 +10,33 @@ class WatchlistRepository:
 
     async def create(self, model: WatchlistModel) -> WatchlistModel:
         self.session.add(model)
-        await self.session.commit()
-        await self.session.refresh(model)
         return model
 
     async def get(self, model_id: int) -> WatchlistModel | None:
         return await self.session.get(WatchlistModel, model_id)
 
+    async def get_by_ticker(self, ticker: str) -> WatchlistModel | None:
+        statement = select(WatchlistModel).where(
+            WatchlistModel.ticker == ticker
+        )
+        result = await self.session.exec(statement)
+        return result.first()
+
     async def list(self) -> list[WatchlistModel]:
-        result = await self.session.exec(select(WatchlistModel))
+        statement = select(WatchlistModel).order_by(
+            col(WatchlistModel.created_at)
+        )
+        result = await self.session.exec(statement)
         return list(result.all())
 
+    async def count(self) -> int:
+        result = await self.session.exec(
+            select(func.count()).select_from(WatchlistModel)
+        )
+        return result.one()
+
     async def update(self, model: WatchlistModel) -> WatchlistModel:
-        managed_model = await self.session.merge(model)
-        await self.session.commit()
-        await self.session.refresh(managed_model)
-        return managed_model
+        return await self.session.merge(model)
 
     async def delete(self, model: WatchlistModel) -> None:
         await self.session.delete(model)
-        await self.session.commit()

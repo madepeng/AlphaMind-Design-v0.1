@@ -200,6 +200,7 @@ async def test_repository_crud_interfaces(
         watchlist = await watchlist_repository.create(
             WatchlistModel(ticker="AAPL", company_name="Apple")
         )
+        await session.flush()
         journal = await journal_repository.create(
             JournalModel(
                 ticker="AAPL",
@@ -236,6 +237,7 @@ async def test_repository_crud_interfaces(
         assert (await settings_repository.update(setting)).value == "dark-mode"
 
         await watchlist_repository.delete(watchlist)
+        await session.flush()
         await journal_repository.delete(journal)
         await settings_repository.delete(setting)
 
