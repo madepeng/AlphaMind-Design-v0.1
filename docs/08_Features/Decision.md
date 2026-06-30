@@ -80,7 +80,7 @@ Version1
 
 不进入 Journal。
 
-Journal 功能将在 T007 实现。。
+Journal 功能将在 T007 实现。
 
 ---
 
