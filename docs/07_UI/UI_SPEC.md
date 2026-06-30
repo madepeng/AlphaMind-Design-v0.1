@@ -53,7 +53,25 @@ Version 1 所有页面统一遵循以下原则：
 * Journal
 * Settings
 
-始终显示。
+Sidebar 始终显示。
+
+Sprint T003：
+
+Home
+
+Enabled
+
+Watchlist
+
+Disabled
+
+Journal
+
+Disabled
+
+Settings
+
+Disabled
 
 ---
 
@@ -75,7 +93,13 @@ Version 1 所有页面统一遵循以下原则：
 
 AI Summary
 
-如果当前页面没有 AI 内容，则隐藏。
+如果当前页面没有 AI 内容：
+
+显示 Empty State。
+
+Right Panel 始终存在。
+
+Version1 不允许隐藏 Right Panel。
 
 ---
 
@@ -171,13 +195,15 @@ SF Pro Display
 布局：
 
 ```
+Main Content
+
 Today's Market
 
 -----------------------
 
 Today's Events
 
------------------------
+Right Panel
 
 AI Daily Summary
 ```
@@ -212,15 +238,17 @@ AI Daily Summary
 
 一句摘要
 
-点击进入 Company。
+点击：
+
+Coming Soon
+
+Version1
+
+不进入 Company。
+
+Company 页面将在 T005 完成。
 
 ---
-
-### AI Daily Summary
-
-一段文字。
-
-100~200 字。
 
 ---
 

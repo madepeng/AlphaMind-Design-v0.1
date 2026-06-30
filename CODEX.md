@@ -352,3 +352,25 @@ Always ask:
 If the answer is "No",
 
 do not implement it.
+
+# Documentation Priority
+
+Priority：
+
+1. MVP_PRD.md
+
+2. API_SPEC.md
+
+3. Feature Specification
+
+4. UI_SPEC.md
+
+5. README.md
+
+When documents conflict：
+
+Stop implementation.
+
+Do not guess.
+
+Wait for clarification.

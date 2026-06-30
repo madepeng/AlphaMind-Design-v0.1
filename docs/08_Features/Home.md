@@ -68,25 +68,47 @@ Watchlist
 
 点击某条事件。
 
-进入对应 Company 页面。
+Version1：
+
+仅保留点击交互。
+
+显示：
+
+Coming Soon
+
+真正进入 Company 页面将在 T005 实现。
 
 ---
 
 # Layout
 
-页面采用三段布局。
+页面采用：
 
----
+Sidebar
+
++
+
+Main Content
+
++
+
+Right Panel
+
+Main Content：
 
 Today's Market
 
----
+↓
 
 Today's Key Events
 
----
+Right Panel：
 
 AI Daily Summary
+
+Version1
+
+AI Daily Summary 不在 Main Content 中重复显示。
 
 ---
 
@@ -130,7 +152,7 @@ Today's Key Events
 
 最多展示：
 
-3条。
+3 条。
 
 每条包括：
 
@@ -138,36 +160,39 @@ Today's Key Events
 
 一句摘要
 
-影响股票数量
+Version1
+
+不要显示：
+
+- 影响股票数量
+- Impact Count
+- Severity
 
 点击：
 
-进入详情。
+仅保留点击交互。
+
+显示：
+
+Coming Soon
+
+真正进入 Company 页面将在 T005 实现。
 
 ---
 
-# Section 3
+# Right Panel
 
 AI Daily Summary
 
-固定一段文字。
+Version1
 
-长度：
+AI Daily Summary 显示在 Right Panel。
 
-100~200字。
+Home Main Content 不再重复显示。
 
-例如：
+如果暂无数据：
 
-今天没有新的重大事件。
-
-继续执行已有研究计划。
-
-或者：
-
-Micron 财报公布。
-
-建议重新评估半导体板块。
-
+显示 Empty State。
 ---
 
 # Loading

@@ -200,11 +200,17 @@ Acceptance
 
 显示：
 
+Main Content
+
 Today's Market
+
+-----------------------
 
 Today's Events
 
-AI Summary
+Right Panel
+
+AI Daily Summary
 
 Loading
 
