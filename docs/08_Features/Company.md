@@ -64,9 +64,13 @@ Watchlist
 
 返回 Watchlist。
 
-Version1
+或者：
 
-Journal 入口显示 Coming Soon。
+进入 Journal。
+
+T007 起：
+
+Journal 入口可用。
 
 ---
 
@@ -444,9 +448,9 @@ Journal Shortcut：
 
 点击：
 
-Coming Soon。
+调用 POST /api/v1/journal。
 
-T007 再实现 Journal 保存。
+保存成功后进入 Journal 页面。
 
 任何模块失败不会影响其它模块。
 
