@@ -326,9 +326,11 @@ Empty
 
 搜索。
 
-点击。
+点击股票后显示 Coming Soon。
 
-进入Company。
+T004 不进入 Company。
+
+Company 页面将在 T005 实现。
 
 数据保存。
 
