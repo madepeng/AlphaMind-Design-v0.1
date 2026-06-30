@@ -280,6 +280,32 @@ T007
 
 ---
 
+## Field Mapping
+
+Version1
+
+Decision Checklist 保存到 Journal 时采用以下字段映射：
+
+| Decision Checklist | Journal |
+|--------------------|---------|
+| Question 1 | reason |
+| Question 2 | bull_case |
+| Question 3 | risk |
+| Question 4 | exit_plan |
+| Decision | decision |
+
+Note 在 Journal 页面填写。
+
+Version1：
+
+不保存 AI Summary。
+
+不保存 Company Name。
+
+Company Name 根据 Ticker 动态显示。
+
+---
+
 # Success
 
 显示：

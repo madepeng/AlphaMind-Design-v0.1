@@ -62,6 +62,14 @@ Version 1 不分析历史数据。
 
 # Entry
 
+Journal 数据来源：
+
+Decision Checklist。
+
+字段映射遵循：
+
+Decision.md。
+
 来源：
 
 Decision 页面。
