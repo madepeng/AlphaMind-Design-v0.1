@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { CompanyCard } from "../../components/cards/CompanyCard";
 import { EmptyView } from "../../components/common/EmptyView";
@@ -12,6 +13,7 @@ import { AddDialog } from "./AddDialog";
 import { WatchlistLoadingView } from "./WatchlistLoadingView";
 
 export function WatchlistPage() {
+  const navigate = useNavigate();
   const { add, remove, retry, state } = useWatchlist();
   const [query, setQuery] = useState("");
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -136,9 +138,7 @@ export function WatchlistPage() {
                 company={company}
                 key={company.ticker}
                 onDelete={handleDelete}
-                onSelect={(ticker) =>
-                  setToast({ message: `${ticker}: Coming Soon`, tone: "notice" })
-                }
+                onSelect={(ticker) => navigate(`/company/${ticker}`)}
               />
             ))}
           </div>

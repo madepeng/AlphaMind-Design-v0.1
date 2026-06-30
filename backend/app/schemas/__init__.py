@@ -1,5 +1,12 @@
 """API schemas."""
 
+from app.schemas.company import (
+    CompanyAISummaryDTO,
+    CompanyDataDTO,
+    CompanyHeaderDTO,
+    CompanyNewsDTO,
+    CompanyResponseDTO,
+)
 from app.schemas.home import (
     HomeDataDTO,
     HomeEventDTO,
@@ -14,6 +21,11 @@ from app.schemas.watchlist import (
 )
 
 __all__ = [
+    "CompanyAISummaryDTO",
+    "CompanyDataDTO",
+    "CompanyHeaderDTO",
+    "CompanyNewsDTO",
+    "CompanyResponseDTO",
     "HomeDataDTO",
     "HomeEventDTO",
     "HomeResponseDTO",

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -39,7 +39,13 @@ const mockedGet = vi.mocked(getWatchlist);
 function renderWatchlist() {
   return render(
     <MemoryRouter initialEntries={["/watchlist"]}>
-      <WatchlistPage />
+      <Routes>
+        <Route path="/watchlist" element={<WatchlistPage />} />
+        <Route
+          path="/company/:ticker"
+          element={<h1>Company destination</h1>}
+        />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -134,7 +140,7 @@ describe("WatchlistPage", () => {
     );
   });
 
-  it("filters locally and shows Coming Soon on selection", async () => {
+  it("filters locally and enters Company on selection", async () => {
     mockedGet.mockResolvedValue(companies);
 
     renderWatchlist();
@@ -146,6 +152,8 @@ describe("WatchlistPage", () => {
 
     expect(screen.queryByText("NVIDIA")).not.toBeInTheDocument();
     fireEvent.click(screen.getByText("AAPL"));
-    expect(screen.getByRole("status")).toHaveTextContent("AAPL: Coming Soon");
+    expect(
+      screen.getByRole("heading", { name: "Company destination" }),
+    ).toBeInTheDocument();
   });
 });

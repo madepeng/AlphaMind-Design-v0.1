@@ -5,6 +5,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
+vi.mock("../pages/Company/CompanyPage", () => ({
+  CompanyPage: () => <h1>Company Page</h1>,
+}));
+
 vi.mock("../pages/Home/HomePage", () => ({
   HomePage: () => <h1>Home Dashboard</h1>,
 }));
@@ -37,6 +41,18 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", { name: "Watchlist Page" }),
+    ).toBeInTheDocument();
+  });
+
+  it("routes to Company", () => {
+    render(
+      <MemoryRouter initialEntries={["/company/NVDA"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Company Page" }),
     ).toBeInTheDocument();
   });
 });
