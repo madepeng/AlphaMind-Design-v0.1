@@ -274,13 +274,13 @@ $185.20
 +2.13%
 ```
 
-Version1
+Version1（T005 起）
 
-点击：
+点击 Company Card
 
-Coming Soon
+↓
 
-Company 页面将在 T005 开启。
+进入 Company 页面。
 
 ---
 

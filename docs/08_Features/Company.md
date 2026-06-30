@@ -62,13 +62,11 @@ Watchlist
 
 # Exit
 
-返回：
+返回 Watchlist。
 
-Watchlist。
+Version1
 
-或者：
-
-进入 Journal。
+Journal 入口显示 Coming Soon。
 
 ---
 
