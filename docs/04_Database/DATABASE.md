@@ -16,7 +16,11 @@ Version 1 采用 SQLite 本地数据库。
 
 数据库仅保存用户数据。
 
-公司信息、新闻、AI分析均来自外部 Provider，不做持久化。
+公司信息和新闻来自外部 Provider，不做持久化。
+
+Company 页面实时获取 AI Analysis。
+
+Journal 保存用户确认后的 AI Summary，用于保留历史研究记录。
 
 ---
 
