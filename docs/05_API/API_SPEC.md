@@ -334,13 +334,10 @@ Response
     }
   ]
 }
+```
 
 ---
 
-
-### B. 在 `GET /api/v1/journal` 后面新增详情接口
-
-```markdown
 ## GET
 
 /api/v1/journal/{id}
@@ -368,15 +365,18 @@ Response
     "updatedAt": "2026-06-30T12:00:00"
   }
 }
+```
+
+---
 
 ## POST
 
 /api/v1/journal
 
+Description
 
-### C. 把 `POST /api/v1/journal` 的 Request 改成：
+保存 Journal。
 
-```
 Request
 
 ```json
@@ -409,6 +409,14 @@ Response
 Description
 
 删除 Journal。
+
+Response
+
+```json
+{
+  "success": true
+}
+```
 
 ---
 
