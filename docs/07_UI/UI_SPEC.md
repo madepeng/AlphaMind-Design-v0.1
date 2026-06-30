@@ -347,9 +347,29 @@ AI Summary：
 * Risks
 * Watch Items
 
-Version1
+T008：
 
-全部使用 Mock 数据。
+调用：
+
+POST /api/v1/analyze
+
+获取真实 AI Summary。
+
+Loading：
+
+显示 Loading。
+
+失败：
+
+显示 Error。
+
+Retry：
+
+允许重新 Analyze。
+
+News：
+
+继续使用 Mock 数据。
 
 ---
 
