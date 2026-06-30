@@ -65,7 +65,7 @@ Home：Enabled
 
 Watchlist：Enabled
 
-Journal：Disabled
+Journal：Enabled（T007）
 
 Settings：Disabled
 
