@@ -110,19 +110,19 @@ Company Header
 
 显示：
 
+Version1
+
 Ticker
 
 Company Name
 
-Industry
+Current Price（Mock）
 
-Market Cap
+Today's Change（Mock）
 
-Current Price
+Industry（Mock）
 
-Today's Change %
-
-更新时间
+Market Cap（Mock）
 
 ---
 
@@ -133,6 +133,12 @@ Latest News
 最多显示：
 
 10 条新闻。
+
+Version1
+
+使用 Mock News。
+
+不要接入真实新闻 Provider。
 
 每条显示：
 
