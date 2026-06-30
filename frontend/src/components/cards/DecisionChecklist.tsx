@@ -50,11 +50,13 @@ const decisionOptions: DecisionValue[] = [
 ];
 
 interface DecisionChecklistProps {
+  disabled?: boolean;
   onDraftChange?: (draft: DecisionFormState, isValid: boolean) => void;
   onSave?: DecisionSaveHandler;
 }
 
 export function DecisionChecklist({
+  disabled = false,
   onDraftChange,
   onSave,
 }: DecisionChecklistProps) {
@@ -75,11 +77,14 @@ export function DecisionChecklist({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (disabled) {
+      return;
+    }
     void save();
   };
 
   const handleShortcut = (event: KeyboardEvent<HTMLFormElement>) => {
-    if (event.ctrlKey && event.key === "Enter") {
+    if (!disabled && event.ctrlKey && event.key === "Enter") {
       event.preventDefault();
       void save();
     }
@@ -103,6 +108,7 @@ export function DecisionChecklist({
                 <TextArea
                   aria-label={`Question ${index + 1}`}
                   className="mt-2"
+                  disabled={disabled}
                   id={id}
                   maxLength={300}
                   onChange={(event) =>
@@ -125,6 +131,7 @@ export function DecisionChecklist({
             <Select
               aria-label="Question 5"
               className="mt-2"
+              disabled={disabled}
               id="decision-select"
               onChange={(event) =>
                 editDecision(event.target.value as DecisionValue)
@@ -143,7 +150,7 @@ export function DecisionChecklist({
 
         <div className="mt-6 flex items-center gap-4">
           <PrimaryButton
-            disabled={!isValid || isSaving}
+            disabled={disabled || !isValid || isSaving}
             type="submit"
           >
             {isSaving ? "Saving..." : "Save Decision"}

@@ -86,6 +86,22 @@ async def test_post_and_list_journals_match_api_spec(
 
 
 @pytest.mark.asyncio
+async def test_post_persists_confirmed_ai_summary(
+    journal_client: httpx.AsyncClient,
+) -> None:
+    summary = "User-confirmed AI summary."
+
+    response = await journal_client.post(
+        "/api/v1/journal",
+        json={**JOURNAL_PAYLOAD, "summary": summary},
+    )
+
+    assert response.status_code == 200
+    items = (await journal_client.get("/api/v1/journal")).json()["data"]
+    assert items[0]["summary"] == summary
+
+
+@pytest.mark.asyncio
 async def test_get_journal_detail(
     journal_client: httpx.AsyncClient,
 ) -> None:

@@ -12,8 +12,15 @@ import { PrimaryButton } from "../../components/common/PrimaryButton";
 import { Toast } from "../../components/common/Toast";
 import { AppLayout } from "../../components/layout/AppLayout";
 import { useCompany } from "../../hooks/useCompany";
+import {
+  type CompanyAnalysisState,
+  useCompanyAnalysis,
+} from "../../hooks/useCompanyAnalysis";
 import { useJournalSave } from "../../hooks/useJournalSave";
-import type { CompanyAISummaryDTO } from "../../types/company";
+import type {
+  CompanyAISummaryDTO,
+  CompanyDTO,
+} from "../../types/company";
 import type { DecisionFormState } from "../../types/decision";
 import {
   CompanyLoadingView,
@@ -22,19 +29,7 @@ import {
 
 export function CompanyPage() {
   const { ticker = "" } = useParams();
-  const navigate = useNavigate();
   const { retry, state } = useCompany(ticker);
-  const { save: saveJournal, status: journalStatus } = useJournalSave();
-  const [decisionDraft, setDecisionDraft] =
-    useState<DecisionFormState | null>(null);
-  const [isDecisionValid, setDecisionValid] = useState(false);
-  const handleDraftChange = useCallback(
-    (draft: DecisionFormState, isValid: boolean) => {
-      setDecisionDraft(draft);
-      setDecisionValid(isValid);
-    },
-    [],
-  );
 
   if (state.status === "loading") {
     return (
@@ -62,16 +57,58 @@ export function CompanyPage() {
     );
   }
 
-  const { aiSummary, header, news } = state.data;
-  const isAnalysisEmpty = hasNoAnalysis(aiSummary);
+  return (
+    <CompanyContent
+      company={state.data}
+      key={`${ticker}:${state.data.header.ticker}`}
+      onCompanyRetry={retry}
+      ticker={ticker}
+    />
+  );
+}
+
+interface CompanyContentProps {
+  company: CompanyDTO;
+  onCompanyRetry: () => void;
+  ticker: string;
+}
+
+function CompanyContent({
+  company,
+  onCompanyRetry,
+  ticker,
+}: CompanyContentProps) {
+  const navigate = useNavigate();
+  const { aiSummary: initialAnalysis, header, news } = company;
+  const { analyze, state: analysisState } = useCompanyAnalysis(
+    ticker,
+    initialAnalysis,
+  );
+  const { save: saveJournal, status: journalStatus } = useJournalSave();
+  const [decisionDraft, setDecisionDraft] =
+    useState<DecisionFormState | null>(null);
+  const [isDecisionValid, setDecisionValid] = useState(false);
+  const handleDraftChange = useCallback(
+    (draft: DecisionFormState, isValid: boolean) => {
+      setDecisionDraft(draft);
+      setDecisionValid(isValid);
+    },
+    [],
+  );
+  const analysis = getAnalysis(analysisState);
+  const isAnalyzing = analysisState.status === "loading";
+  const confirmedSummary =
+    analysisState.status === "loaded"
+      ? analysisState.data.summary
+      : null;
 
   return (
     <AppLayout
       rightPanel={
         <CompanySummaryPanel
-          analysis={aiSummary}
-          isEmpty={isAnalysisEmpty}
-          onRefresh={retry}
+          analysis={analysis}
+          onRetry={analyze}
+          status={analysisState.status}
         />
       }
     >
@@ -94,23 +131,38 @@ export function CompanyPage() {
           {news.length ? (
             <NewsList news={news} ticker={header.ticker} />
           ) : (
-            <EmptyView description="No recent news." onRefresh={retry} />
+            <EmptyView
+              description="No recent news."
+              onRefresh={onCompanyRetry}
+            />
           )}
         </div>
       </section>
 
       <section aria-labelledby="analysis-heading" className="mt-10">
-        <h2 className="text-lg font-semibold" id="analysis-heading">
-          AI Summary
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold" id="analysis-heading">
+            AI Summary
+          </h2>
+          <PrimaryButton disabled={isAnalyzing} onClick={analyze}>
+            {isAnalyzing ? "Analyzing..." : "Analyze"}
+          </PrimaryButton>
+        </div>
         <div className="mt-4">
-          {isAnalysisEmpty ? (
+          {analysisState.status === "loading" ? (
+            <CompanySummaryLoadingView />
+          ) : analysisState.status === "error" ? (
+            <ErrorView
+              description="AI analysis could not be generated."
+              onRetry={analyze}
+            />
+          ) : hasNoAnalysis(analysis) ? (
             <EmptyView
               description="AI analysis unavailable."
-              onRefresh={retry}
+              onRefresh={analyze}
             />
           ) : (
-            <CompanyAISummary analysis={aiSummary} />
+            <CompanyAISummary analysis={analysis} />
           )}
         </div>
       </section>
@@ -120,7 +172,10 @@ export function CompanyPage() {
           Decision Checklist
         </h2>
         <div className="mt-4">
-          <DecisionChecklist onDraftChange={handleDraftChange} />
+          <DecisionChecklist
+            disabled={isAnalyzing}
+            onDraftChange={handleDraftChange}
+          />
         </div>
       </section>
 
@@ -130,14 +185,18 @@ export function CompanyPage() {
         </h2>
         <PrimaryButton
           className="mt-4"
-          disabled={!isDecisionValid || journalStatus === "saving"}
+          disabled={
+            isAnalyzing ||
+            !isDecisionValid ||
+            journalStatus === "saving"
+          }
           onClick={async () => {
             if (!decisionDraft) {
               return;
             }
             const saved = await saveJournal({
               ticker: header.ticker,
-              summary: null,
+              summary: confirmedSummary,
               ...decisionDraft,
               note: null,
             });
@@ -159,14 +218,14 @@ export function CompanyPage() {
 
 interface CompanySummaryPanelProps {
   analysis: CompanyAISummaryDTO;
-  isEmpty: boolean;
-  onRefresh: () => void;
+  onRetry: () => void;
+  status: CompanyAnalysisState["status"];
 }
 
 function CompanySummaryPanel({
   analysis,
-  isEmpty,
-  onRefresh,
+  onRetry,
+  status,
 }: CompanySummaryPanelProps) {
   return (
     <section aria-labelledby="company-summary-heading">
@@ -174,10 +233,17 @@ function CompanySummaryPanel({
         AI Summary
       </h2>
       <div className="mt-4">
-        {isEmpty ? (
+        {status === "loading" ? (
+          <CompanySummaryLoadingView />
+        ) : status === "error" ? (
+          <ErrorView
+            description="AI analysis could not be generated."
+            onRetry={onRetry}
+          />
+        ) : hasNoAnalysis(analysis) ? (
           <EmptyView
             description="AI analysis unavailable."
-            onRefresh={onRefresh}
+            onRefresh={onRetry}
           />
         ) : (
           <BaseCard>
@@ -189,6 +255,20 @@ function CompanySummaryPanel({
       </div>
     </section>
   );
+}
+
+function getAnalysis(
+  state: CompanyAnalysisState,
+): CompanyAISummaryDTO {
+  if (state.status === "idle" || state.status === "loaded") {
+    return state.data;
+  }
+  return {
+    summary: "",
+    bullCase: [],
+    risk: [],
+    watchItems: [],
+  };
 }
 
 function hasNoAnalysis(analysis: CompanyAISummaryDTO): boolean {

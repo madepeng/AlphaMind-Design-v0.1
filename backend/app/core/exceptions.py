@@ -16,3 +16,7 @@ class ValidationException(ApplicationException):
 
 class NotFoundException(ApplicationException):
     status_code = 404
+
+
+class ExternalAPIException(ApplicationException):
+    status_code = 500

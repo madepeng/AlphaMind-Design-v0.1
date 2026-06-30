@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import type { ApiResponse } from "../types/api";
-import type { CompanyDTO } from "../types/company";
+import type { CompanyAISummaryDTO, CompanyDTO } from "../types/company";
 
 const companyApiClient = axios.create({
   baseURL:
@@ -12,6 +12,19 @@ const companyApiClient = axios.create({
 export async function getCompany(ticker: string): Promise<CompanyDTO> {
   const response = await companyApiClient.get<ApiResponse<CompanyDTO>>(
     `/api/v1/company/${encodeURIComponent(ticker)}`,
+  );
+  return response.data.data;
+}
+
+export async function analyzeCompany(
+  ticker: string,
+): Promise<CompanyAISummaryDTO> {
+  const response = await companyApiClient.post<
+    ApiResponse<CompanyAISummaryDTO>
+  >(
+    "/api/v1/analyze",
+    { ticker },
+    { timeout: 15_000 },
   );
   return response.data.data;
 }

@@ -3,12 +3,16 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getCompany } from "../../api/companyApi";
+import { analyzeCompany, getCompany } from "../../api/companyApi";
 import { createJournal } from "../../api/journalApi";
-import type { CompanyDTO } from "../../types/company";
+import type {
+  CompanyAISummaryDTO,
+  CompanyDTO,
+} from "../../types/company";
 import { CompanyPage } from "./CompanyPage";
 
 vi.mock("../../api/companyApi", () => ({
+  analyzeCompany: vi.fn(),
   getCompany: vi.fn(),
 }));
 
@@ -45,6 +49,7 @@ const company: CompanyDTO = {
 };
 
 const mockedGetCompany = vi.mocked(getCompany);
+const mockedAnalyzeCompany = vi.mocked(analyzeCompany);
 const mockedCreateJournal = vi.mocked(createJournal);
 
 function deferredSave() {
@@ -71,6 +76,7 @@ afterEach(cleanup);
 describe("CompanyPage", () => {
   beforeEach(() => {
     mockedGetCompany.mockReset();
+    mockedAnalyzeCompany.mockReset();
     mockedCreateJournal.mockReset();
   });
 
@@ -140,14 +146,54 @@ describe("CompanyPage", () => {
     expect(screen.getByLabelText("Question 5")).toBeEnabled();
   });
 
+  it("analyzes with loading, displays the result, and supports retry", async () => {
+    mockedGetCompany.mockResolvedValue(company);
+    const pending = deferredAnalysis();
+    mockedAnalyzeCompany
+      .mockReturnValueOnce(pending.promise)
+      .mockResolvedValueOnce({
+        ...company.aiSummary,
+        summary: "Fresh AI analysis after retry.",
+      });
+
+    renderCompany();
+
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Analyze" }),
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Analyzing..." }),
+    ).toBeDisabled();
+    expect(screen.getByLabelText("Question 1")).toBeDisabled();
+    pending.reject(new Error("Unavailable"));
+
+    const retryButtons = await screen.findAllByRole("button", {
+      name: "Retry",
+    });
+    fireEvent.click(retryButtons[0]);
+
+    expect(
+      await screen.findAllByText("Fresh AI analysis after retry."),
+    ).toHaveLength(2);
+    expect(mockedAnalyzeCompany).toHaveBeenCalledTimes(2);
+    expect(screen.getByLabelText("Question 1")).toBeEnabled();
+  });
+
   it("saves the current checklist to Journal and navigates", async () => {
     mockedGetCompany.mockResolvedValue(company);
+    mockedAnalyzeCompany.mockResolvedValue({
+      ...company.aiSummary,
+      summary: "User-confirmed AI summary.",
+    });
     const pending = deferredSave();
     mockedCreateJournal.mockReturnValue(pending.promise);
 
     renderCompany();
 
     await screen.findByLabelText("Question 1");
+    fireEvent.click(screen.getByRole("button", { name: "Analyze" }));
+    await screen.findAllByText("User-confirmed AI summary.");
     for (let index = 1; index <= 4; index += 1) {
       fireEvent.change(screen.getByLabelText(`Question ${index}`), {
         target: { value: `Answer ${index}` },
@@ -166,7 +212,7 @@ describe("CompanyPage", () => {
     ).toBeInTheDocument();
     expect(mockedCreateJournal).toHaveBeenCalledWith({
       ticker: "NVDA",
-      summary: null,
+      summary: "User-confirmed AI summary.",
       reason: "Answer 1",
       bullCase: "Answer 2",
       risk: "Answer 3",
@@ -198,3 +244,17 @@ describe("CompanyPage", () => {
     );
   });
 });
+
+function deferredAnalysis() {
+  let resolvePromise: (value: CompanyAISummaryDTO) => void = () => undefined;
+  let rejectPromise: (reason?: unknown) => void = () => undefined;
+  const promise = new Promise<CompanyAISummaryDTO>((resolve, reject) => {
+    resolvePromise = resolve;
+    rejectPromise = reject;
+  });
+  return {
+    promise,
+    reject: rejectPromise,
+    resolve: resolvePromise,
+  };
+}

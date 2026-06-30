@@ -8,6 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.api.analyze import router as analyze_router
 from app.api.company import router as company_router
 from app.api.home import router as home_router
 from app.api.journal import router as journal_router
@@ -48,6 +49,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
 )
+app.include_router(analyze_router)
 app.include_router(company_router)
 app.include_router(home_router)
 app.include_router(journal_router)
