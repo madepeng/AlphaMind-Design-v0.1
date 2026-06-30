@@ -6,6 +6,8 @@ import structlog
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database.database import initialize_database
+
 logger = structlog.get_logger()
 
 
@@ -21,6 +23,7 @@ class HealthResponse(TypedDict):
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    await initialize_database()
     logger.info("application_started", app="AlphaMind OS")
     yield
     logger.info("application_stopped", app="AlphaMind OS")
