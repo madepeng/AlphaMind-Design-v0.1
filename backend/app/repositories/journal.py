@@ -10,8 +10,6 @@ class JournalRepository:
 
     async def create(self, model: JournalModel) -> JournalModel:
         self.session.add(model)
-        await self.session.commit()
-        await self.session.refresh(model)
         return model
 
     async def get(self, model_id: int) -> JournalModel | None:
@@ -22,11 +20,7 @@ class JournalRepository:
         return list(result.all())
 
     async def update(self, model: JournalModel) -> JournalModel:
-        managed_model = await self.session.merge(model)
-        await self.session.commit()
-        await self.session.refresh(managed_model)
-        return managed_model
+        return await self.session.merge(model)
 
     async def delete(self, model: JournalModel) -> None:
         await self.session.delete(model)
-        await self.session.commit()

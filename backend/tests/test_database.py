@@ -54,8 +54,8 @@ async def test_existing_database_is_not_recreated(
     async with database_engine.begin() as connection:
         await connection.execute(
             text(
-                "INSERT INTO watchlist (ticker, company_name, created_at) "
-                "VALUES ('AAPL', 'Apple', CURRENT_TIMESTAMP)"
+                "INSERT INTO watchlist (ticker, created_at) "
+                "VALUES ('AAPL', CURRENT_TIMESTAMP)"
             )
         )
 
@@ -69,7 +69,7 @@ async def test_existing_database_is_not_recreated(
 
 def test_sqlmodel_metadata_matches_database_specification() -> None:
     expected_columns = {
-        "watchlist": {"id", "ticker", "company_name", "created_at"},
+        "watchlist": {"id", "ticker", "created_at"},
         "journal": {
             "id",
             "ticker",
@@ -104,13 +104,12 @@ async def test_column_types_nullability_and_indexes_match_specification(
     assert schemas["watchlist"]["columns"] == {
         "id": ("INTEGER", False),
         "ticker": ("TEXT", False),
-        "company_name": ("TEXT", False),
         "created_at": ("DATETIME", False),
     }
     assert schemas["journal"]["columns"] == {
         "id": ("INTEGER", False),
         "ticker": ("TEXT", False),
-        "summary": ("TEXT", False),
+        "summary": ("TEXT", True),
         "reason": ("TEXT", False),
         "bull_case": ("TEXT", False),
         "risk": ("TEXT", False),
@@ -198,13 +197,11 @@ async def test_repository_crud_interfaces(
         settings_repository = SettingsRepository(session)
 
         watchlist = await watchlist_repository.create(
-            WatchlistModel(ticker="AAPL", company_name="Apple")
+            WatchlistModel(ticker="AAPL")
         )
-        await session.flush()
         journal = await journal_repository.create(
             JournalModel(
                 ticker="AAPL",
-                summary="Summary",
                 reason="Reason",
                 bull_case="Bull case",
                 risk="Risk",
@@ -213,12 +210,16 @@ async def test_repository_crud_interfaces(
             )
         )
         setting = await settings_repository.create(
-            SettingsModel(key="THEME", value="dark")
+            SettingsModel(key="THEME")
         )
+        await session.flush()
 
         assert watchlist.id is not None
         assert journal.id is not None
         assert setting.id is not None
+        assert journal.summary is None
+        assert journal.note is None
+        assert setting.value is None
         assert await watchlist_repository.get(watchlist.id) == watchlist
         assert await journal_repository.get(journal.id) == journal
         assert await settings_repository.get(setting.id) == setting
@@ -226,20 +227,18 @@ async def test_repository_crud_interfaces(
         assert await journal_repository.list() == [journal]
         assert await settings_repository.list() == [setting]
 
-        watchlist.company_name = "Apple Inc."
+        watchlist.ticker = "MSFT"
         journal.note = "Reviewed"
         setting.value = "dark-mode"
 
-        assert (
-            await watchlist_repository.update(watchlist)
-        ).company_name == "Apple Inc."
+        assert (await watchlist_repository.update(watchlist)).ticker == "MSFT"
         assert (await journal_repository.update(journal)).note == "Reviewed"
         assert (await settings_repository.update(setting)).value == "dark-mode"
 
         await watchlist_repository.delete(watchlist)
-        await session.flush()
         await journal_repository.delete(journal)
         await settings_repository.delete(setting)
+        await session.flush()
 
         assert await watchlist_repository.list() == []
         assert await journal_repository.list() == []

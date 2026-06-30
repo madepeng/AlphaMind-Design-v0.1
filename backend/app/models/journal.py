@@ -10,13 +10,16 @@ class JournalModel(SQLModel, table=True):
     __tablename__ = "journal"
 
     id: int | None = Field(default=None, primary_key=True)
-    ticker: str = Field(sa_column=Column(Text, nullable=True, index=True))
-    summary: str = Field(sa_column=Column(Text, nullable=True))
-    reason: str = Field(sa_column=Column(Text, nullable=True))
-    bull_case: str = Field(sa_column=Column(Text, nullable=True))
-    risk: str = Field(sa_column=Column(Text, nullable=True))
-    exit_plan: str = Field(sa_column=Column(Text, nullable=True))
-    decision: str = Field(sa_column=Column(Text, nullable=True))
+    ticker: str = Field(sa_column=Column(Text, nullable=False, index=True))
+    summary: str | None = Field(
+        default=None,
+        sa_column=Column(Text, nullable=True),
+    )
+    reason: str = Field(sa_column=Column(Text, nullable=False))
+    bull_case: str = Field(sa_column=Column(Text, nullable=False))
+    risk: str = Field(sa_column=Column(Text, nullable=False))
+    exit_plan: str = Field(sa_column=Column(Text, nullable=False))
+    decision: str = Field(sa_column=Column(Text, nullable=False))
     note: str | None = Field(
         default=None,
         sa_column=Column(Text, nullable=True),
@@ -25,11 +28,11 @@ class JournalModel(SQLModel, table=True):
         default_factory=utc_now,
         sa_column=Column(
             DateTime(timezone=True),
-            nullable=True,
+            nullable=False,
             index=True,
         ),
     )
     updated_at: datetime = Field(
         default_factory=utc_now,
-        sa_column=Column(DateTime(timezone=True), nullable=True),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
     )

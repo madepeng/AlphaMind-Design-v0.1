@@ -11,10 +11,9 @@ class WatchlistModel(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     ticker: str = Field(
-        sa_column=Column(Text, nullable=True, unique=True, index=True)
+        sa_column=Column(Text, nullable=False, unique=True, index=True)
     )
-    company_name: str = Field(sa_column=Column(Text, nullable=True))
     created_at: datetime = Field(
         default_factory=utc_now,
-        sa_column=Column(DateTime(timezone=True), nullable=True),
+        sa_column=Column(DateTime(timezone=True), nullable=False),
     )

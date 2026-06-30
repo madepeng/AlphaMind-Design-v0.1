@@ -41,10 +41,7 @@ class WatchlistService:
         if await self.repository.count() >= WATCHLIST_LIMIT:
             raise BusinessException("Watchlist Full")
 
-        company_name = COMPANY_NAMES.get(ticker, ticker)
-        await self.repository.create(
-            WatchlistModel(ticker=ticker, company_name=company_name)
-        )
+        await self.repository.create(WatchlistModel(ticker=ticker))
         await self.session.commit()
 
     async def delete(self, raw_ticker: str) -> None:
@@ -69,7 +66,7 @@ class WatchlistService:
         price, change = MARKET_MOCKS.get(model.ticker, (100.0, 0.0))
         return WatchlistItemDTO(
             ticker=model.ticker,
-            companyName=model.company_name,
+            companyName=COMPANY_NAMES.get(model.ticker, model.ticker),
             price=price,
             change=change,
         )
