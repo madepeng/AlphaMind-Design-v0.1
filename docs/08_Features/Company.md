@@ -215,7 +215,7 @@ AI 返回四部分内容。
 
 Decision Checklist
 
-固定五个输入项。
+固定四个输入项 + 一个 Decision 选择。
 
 Question 1
 
@@ -233,11 +233,9 @@ Question 4
 
 如果判断错误怎么办？
 
-Question 5
+Decision
 
 今天是否执行？
-
-Decision
 
 允许值：
 

@@ -390,18 +390,15 @@ Error
 
 搜索 Journal。
 
-排序 Journal。
-
 删除 Journal。
 
 查看 Detail。
 
 重启后数据仍存在。
 
-Version 1 即视为完成。
-
 summary 为空时页面正常显示。
 
+Version 1 即视为完成。
 ---
 
 # Out Of Scope
