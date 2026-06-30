@@ -92,13 +92,19 @@ Watchlist
 
 # Exit
 
+Version1
+
 点击：
 
 某一家公司。
 
-进入：
+显示：
 
-Company 页面。
+Coming Soon。
+
+Company 页面将在 T005 实现。
+
+本阶段不跳转。
 
 ---
 
@@ -373,3 +379,23 @@ Infinite Scroll。
 最多20条。
 
 全部加载。
+
+# Developer Notes
+
+Version1
+
+Company Name 使用 Mock。
+
+例如：
+
+NVDA → NVIDIA
+
+AAPL → Apple
+
+TSM → TSMC
+
+其它未知 Ticker：
+
+Company Name = Ticker。
+
+后续版本由 Market Provider 提供真实公司名称。

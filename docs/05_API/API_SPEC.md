@@ -119,6 +119,22 @@ Description
 
 获取股票池。
 
+Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "ticker": "NVDA",
+      "companyName": "NVIDIA",
+      "price": 185.2,
+      "change": 2.13
+    }
+  ]
+}
+```
+
 ---
 
 ## POST
@@ -160,6 +176,14 @@ Description
 删除股票。
 
 ---
+
+Response
+
+```json
+{
+  "success": true
+}
+```
 
 # Company
 

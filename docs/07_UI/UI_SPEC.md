@@ -278,7 +278,13 @@ $185.20
 +2.13%
 ```
 
-点击进入 Company。
+Version1
+
+点击：
+
+Coming Soon
+
+Company 页面将在 T005 开启。
 
 ---
 
