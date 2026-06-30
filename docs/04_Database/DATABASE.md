@@ -49,9 +49,9 @@ Version1 数据原则：
 - 只存用户数据
 - 不缓存市场数据
 - 不缓存新闻
-- 不缓存 AI 输出
+- Company 页面实时获取 AI 分析
+- Journal 保存用户确认后的 AI Summary
 - 数据模型保持简单
-- 不提前设计 Version2
 
 ---
 
