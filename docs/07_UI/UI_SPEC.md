@@ -527,7 +527,7 @@ Tab
 
 Enter
 
-Ctrl + Enter（保存 Journal）
+Ctrl + Enter（保存当前表单）
 
 ESC（关闭弹窗）
 

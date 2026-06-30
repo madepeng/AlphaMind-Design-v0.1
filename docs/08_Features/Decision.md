@@ -72,9 +72,15 @@ AI Summary 为 Mock，不作为解锁条件。
 
 用户点击：
 
-Save Journal。
+Save Decision。
 
-完成研究流程。
+完成本次 Decision Checklist 编辑。
+
+Version1
+
+不进入 Journal。
+
+Journal 功能将在 T007 实现。。
 
 ---
 
@@ -108,7 +114,7 @@ Decision
 
 ---
 
-Save Journal
+Save Decision
 
 ---
 
