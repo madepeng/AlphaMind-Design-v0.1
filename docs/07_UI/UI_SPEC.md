@@ -340,11 +340,16 @@ Latest News：
 
 AI Summary：
 
-三个 Card：
+四个区域：
 
+* Summary
 * Bull Case
 * Risks
 * Watch Items
+
+Version1
+
+全部使用 Mock 数据。
 
 ---
 
