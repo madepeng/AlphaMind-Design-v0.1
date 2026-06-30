@@ -236,13 +236,13 @@ AI Daily Summary
 
 点击：
 
-Coming Soon
+进入 Company 页面。
 
-Version1
+Version1（T005 起）
 
-不进入 Company。
+支持进入 Company。
 
-Company 页面将在 T005 完成。
+后续可继续进入 Decision、Journal。
 
 ---
 
