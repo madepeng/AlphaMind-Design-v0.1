@@ -1,0 +1,22 @@
+{
+  "name": "alphamind-os",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "concurrently --kill-others --names backend,desktop \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:backend": "cd backend && uv run uvicorn app.main:app --reload",
+    "dev:frontend": "pnpm --dir frontend dev",
+    "build": "pnpm --dir frontend build",
+    "lint": "pnpm --dir frontend lint && cd backend && uv run ruff check . && uv run mypy app",
+    "test": "pnpm test:backend && pnpm test:frontend",
+    "test:backend": "cd backend && uv run pytest",
+    "test:frontend": "pnpm --dir frontend test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

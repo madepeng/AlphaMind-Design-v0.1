@@ -1,0 +1,1 @@
+"""AlphaMind backend application."""
