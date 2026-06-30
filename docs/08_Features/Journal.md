@@ -134,9 +134,11 @@ Journal Detail
 
 Search
 
-Sort
+Version1
 
-Refresh
+Sort：Coming Soon
+
+Refresh：Coming Soon
 
 ---
 
@@ -157,30 +159,6 @@ Company Name 不保存到数据库。
 Company Name 通过 Ticker 动态映射显示。
 
 实时过滤。
-
----
-
-# Sort
-
-支持：
-
-Newest
-
-Oldest
-
-默认：
-
-Newest。
-
----
-
-# Refresh
-
-重新加载本地数据库。
-
-Version 1：
-
-不联网。
 
 ---
 
@@ -263,10 +241,6 @@ Question 3
 ---
 
 Question 4
-
----
-
-Question 5
 
 ---
 

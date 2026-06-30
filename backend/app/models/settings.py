@@ -11,7 +11,7 @@ class SettingsModel(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     key: str = Field(
-        sa_column=Column(Text, nullable=False, unique=True, index=True)
+        sa_column=Column(Text, nullable=True, unique=True, index=True)
     )
     value: str | None = Field(
         default=None,
@@ -19,5 +19,5 @@ class SettingsModel(SQLModel, table=True):
     )
     updated_at: datetime = Field(
         default_factory=utc_now,
-        sa_column=Column(DateTime(timezone=True), nullable=False),
+        sa_column=Column(DateTime(timezone=True), nullable=True),
     )
