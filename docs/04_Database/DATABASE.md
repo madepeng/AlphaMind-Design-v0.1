@@ -87,7 +87,6 @@ Columns
 |---------|------|----------|-------------|
 | id | INTEGER | No | Primary Key |
 | ticker | TEXT | No | 股票代码 |
-| company_name | TEXT | No | 公司名称 |
 | created_at | DATETIME | No | 创建时间 |
 
 Constraints
@@ -133,6 +132,16 @@ Columns
 | note | TEXT | Yes | 用户备注 |
 | created_at | DATETIME | No | 创建时间 |
 | updated_at | DATETIME | No | 更新时间 |
+
+### Version1
+
+Journal 不保存 Company Name。
+
+Company Name 根据 ticker 在展示时动态获取。
+
+这样可以避免公司改名导致历史数据不一致。
+
+数据库仅保存 ticker。
 
 Business Rules
 
