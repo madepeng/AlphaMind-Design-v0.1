@@ -199,11 +199,11 @@ Version1
 
 统一返回：
 
-基础信息
+Header
 
-新闻
+Latest News
 
-财报摘要
+AI Summary
 
 Response
 

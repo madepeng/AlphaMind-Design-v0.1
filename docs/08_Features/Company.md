@@ -255,30 +255,25 @@ Watch
 
 # Section 5
 
-Journal Shortcut
+## Journal Shortcut
 
 Version1
 
-仅显示按钮。
+显示：
+
+Save Journal
+
+按钮。
 
 点击：
 
 Coming Soon
 
-Journal 保存将在 T007 实现。
+不要保存任何数据。
 
-AI Summary
+不要调用 Journal API。
 
-Checklist
-
-Decision
-
-Note
-
-保存成功后：
-
-返回成功提示。
-
+Journal 功能将在 T007 实现。
 ---
 
 # Loading
@@ -349,19 +344,23 @@ GET
 
 CompanyDTO
 
-POST
+## Version1 API Scope
 
-/analyze
+T005
 
-返回：
+仅使用：
 
-AISummaryDTO
+GET /api/v1/company/{ticker}
 
-POST
+不要调用：
 
-/journal
+POST /analyze
 
-保存研究记录。
+POST /journal
+
+OpenAI 将在 T008 实现。
+
+Journal 将在 T007 实现。
 
 ---
 
@@ -427,7 +426,15 @@ AI Summary 正常显示。
 
 Checklist 可填写。
 
-Journal 可保存。
+Journal Shortcut：
+
+显示按钮。
+
+点击：
+
+Coming Soon。
+
+T007 再实现 Journal 保存。
 
 任何模块失败不会影响其它模块。
 
