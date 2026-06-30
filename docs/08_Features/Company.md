@@ -362,21 +362,41 @@ CompanyDTO
 
 ## Version1 API Scope
 
-T005
+T008
 
-仅使用：
+使用：
 
 GET /api/v1/company/{ticker}
 
-不要调用：
+POST /api/v1/analyze
 
-POST /analyze
+POST /api/v1/journal
 
-POST /journal
+Company 页面：
 
-OpenAI 将在 T008 实现。
+点击 Analyze：
 
-Journal 将在 T007 实现。
+调用：
+
+POST /api/v1/analyze
+
+获取真实 AI Summary。
+
+点击 Save Journal：
+
+调用：
+
+POST /api/v1/journal
+
+保存当前研究记录。
+
+Version1：
+
+不支持 Streaming。
+
+不支持 Chat。
+
+不支持多轮对话。
 
 ---
 

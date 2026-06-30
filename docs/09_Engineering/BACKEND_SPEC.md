@@ -210,23 +210,33 @@ Service 不需要改。
 
 # AI Layer
 
-统一：
+统一使用：
 
 AIService
 
 Version1：
 
-只有：
+AIService 提供：
 
 CompanyAnalysis()
 
-禁止：
+负责：
 
-多个 Prompt。
+调用 OpenAI Responses API。
 
-禁止：
+返回：
 
-多个 Agent。
+AI Summary。
+
+禁止新增：
+
+AnalyzeService
+
+SummaryService
+
+ChatService
+
+后续所有 AI 能力统一复用 AIService。
 
 ---
 
