@@ -67,7 +67,7 @@ Watchlist：Enabled
 
 Journal：Enabled（T007）
 
-Settings：Disabled
+Settings：Enabled（T009 起）
 
 ---
 

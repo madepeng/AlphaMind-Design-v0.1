@@ -207,6 +207,30 @@ FinnhubProvider
 Service 不需要改。
 
 ---
+# AI Configuration
+
+T009 起：
+
+AIService 获取 API Key 的优先级：
+
+1. settings 表中的 OPENAI_API_KEY
+2. .env 中的 OPENAI_API_KEY
+
+如果两者都为空：
+
+返回配置错误。
+
+不要调用 OpenAI。
+
+AIService 获取 Model 的优先级：
+
+1. settings 表中的 OPENAI_MODEL
+2. .env 中的 OPENAI_MODEL
+3. 默认 gpt-5.5
+
+Security：
+
+禁止在日志中输出 API Key。
 
 # AI Layer
 

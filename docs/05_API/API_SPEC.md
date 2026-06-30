@@ -430,6 +430,19 @@ Description
 
 获取配置。
 
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "openaiApiKey": "",
+    "model": "gpt-5.5",
+    "theme": "dark"
+  }
+}
+```
+
 ---
 
 ## PUT
@@ -460,23 +473,15 @@ Response
 
 ---
 
-# HTTP Status
+## Mapping
 
-200
+Frontend 字段与 settings 表 key 映射：
 
-Success
-
-400
-
-Validation Error
-
-404
-
-Not Found
-
-500
-
-Internal Error
+| Frontend | Settings Key |
+|---------|--------------|
+| openaiApiKey | OPENAI_API_KEY |
+| model | OPENAI_MODEL |
+| theme | THEME |
 
 ---
 
