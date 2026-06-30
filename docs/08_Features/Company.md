@@ -253,7 +253,7 @@ Watch
 
 ## Journal Shortcut
 
-Version1
+T007 起：
 
 显示：
 
@@ -263,13 +263,29 @@ Save Journal
 
 点击：
 
-Coming Soon
+调用：
 
-不要保存任何数据。
+POST /api/v1/journal
 
-不要调用 Journal API。
+保存当前 Decision Checklist 内容。
 
-Journal 功能将在 T007 实现。
+保存成功后：
+
+进入 Journal 页面。
+
+保存字段映射遵循：
+
+docs/08_Features/Decision.md
+
+Version1
+
+不保存 Company Name。
+
+不保存 News。
+
+不保存 Market Data。
+
+summary 允许为空。
 ---
 
 # Loading
