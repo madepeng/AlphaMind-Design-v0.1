@@ -184,7 +184,13 @@ Today's Change
 
 点击：
 
-进入 Company。
+Coming Soon
+
+Version1
+
+不进入 Company。
+
+Company 页面将在 T005 实现。
 
 ---
 

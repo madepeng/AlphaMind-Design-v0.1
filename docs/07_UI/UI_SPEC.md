@@ -57,21 +57,17 @@ Sidebar 始终显示。
 
 Sprint T003：
 
-Home
+Sidebar
 
-Enabled
+Version1
 
-Watchlist
+Home：Enabled
 
-Disabled
+Watchlist：Enabled（T004）
 
-Journal
+Journal：Disabled
 
-Disabled
-
-Settings
-
-Disabled
+Settings：Disabled
 
 ---
 
