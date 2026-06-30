@@ -254,47 +254,41 @@ Save 按钮保持 Disabled。
 
 点击：
 
-Save Journal
+Save
 
-系统执行：
+Version1
 
-POST /journal
+仅保存当前页面状态。
 
-保存：
+不要写数据库。
 
-Ticker
+不要调用：
 
-Summary
+POST /api/v1/journal
 
-Reason
+Journal 功能将在：
 
-Bull Case
+T007
 
-Risk
-
-Exit Plan
-
-Decision
-
-Note
-
-Created Time
+实现。
 
 ---
 
 # Success
 
-保存成功。
-
 显示：
 
-Journal Saved.
+Decision Saved.
 
-按钮：
+仅表示：
 
-View Journal
+当前 Decision 状态已保存（本地状态）。
 
-允许进入 Journal 页面。
+不要出现：
+
+View Journal。
+
+Version1 不进入 Journal。
 
 ---
 
@@ -370,33 +364,17 @@ Focus State
 
 # API
 
-POST
+Version1
 
-/api/v1/journal
+不调用任何保存接口。
 
-Request
+Decision 保存仅维护当前页面状态。
 
-Ticker
+Journal API 将在：
 
-Summary
+T007
 
-Reason
-
-Bull Case
-
-Risk
-
-Exit Plan
-
-Decision
-
-Note
-
-Response
-
-Success
-
-Boolean
+实现。
 
 ---
 
@@ -442,7 +420,9 @@ Decision 可选择。
 
 Save 正常。
 
-Journal 正常保存。
+Decision 状态正常保存（本地）。
+
+Journal 不属于 Version1 Sprint。
 
 Loading 正常。
 
@@ -487,3 +467,25 @@ Decision Checklist 必须保持简单。
 Version 1 永远保持固定五步。
 
 任何新增问题统一进入 Backlog。
+
+## Sprint Scope
+
+T006
+
+完成：
+
+✓ Decision Checklist
+
+✓ Validation
+
+✓ UI State
+
+✓ Save Button
+
+不完成：
+
+✗ Journal
+
+✗ SQLite
+
+✗ OpenAI

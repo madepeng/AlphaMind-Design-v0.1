@@ -285,6 +285,19 @@ Response
 ```
 
 ---
+Version1
+
+Journal API
+
+将在：
+
+T007
+
+实现。
+
+T006
+
+不要调用。
 
 # Journal
 
