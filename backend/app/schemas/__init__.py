@@ -13,6 +13,13 @@ from app.schemas.home import (
     HomeResponseDTO,
     MarketDTO,
 )
+from app.schemas.journal import (
+    JournalCreateDTO,
+    JournalDetailResponseDTO,
+    JournalDTO,
+    JournalListResponseDTO,
+    JournalSuccessResponseDTO,
+)
 from app.schemas.watchlist import (
     SuccessResponseDTO,
     WatchlistCreateDTO,
@@ -30,6 +37,11 @@ __all__ = [
     "HomeEventDTO",
     "HomeResponseDTO",
     "MarketDTO",
+    "JournalCreateDTO",
+    "JournalDetailResponseDTO",
+    "JournalDTO",
+    "JournalListResponseDTO",
+    "JournalSuccessResponseDTO",
     "SuccessResponseDTO",
     "WatchlistCreateDTO",
     "WatchlistItemDTO",

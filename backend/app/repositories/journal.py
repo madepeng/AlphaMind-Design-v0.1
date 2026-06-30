@@ -1,4 +1,4 @@
-from sqlmodel import select
+from sqlmodel import col, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models import JournalModel
@@ -16,7 +16,10 @@ class JournalRepository:
         return await self.session.get(JournalModel, model_id)
 
     async def list(self) -> list[JournalModel]:
-        result = await self.session.exec(select(JournalModel))
+        statement = select(JournalModel).order_by(
+            col(JournalModel.created_at).desc()
+        )
+        result = await self.session.exec(statement)
         return list(result.all())
 
     async def update(self, model: JournalModel) -> JournalModel:

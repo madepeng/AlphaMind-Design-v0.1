@@ -1,10 +1,11 @@
-import type { FormEvent, KeyboardEvent } from "react";
+import { useEffect, type FormEvent, type KeyboardEvent } from "react";
 
 import {
   type DecisionSaveHandler,
   useDecisionChecklist,
 } from "../../hooks/useDecisionChecklist";
 import type {
+  DecisionFormState,
   DecisionQuestionField,
   DecisionValue,
 } from "../../types/decision";
@@ -49,10 +50,14 @@ const decisionOptions: DecisionValue[] = [
 ];
 
 interface DecisionChecklistProps {
+  onDraftChange?: (draft: DecisionFormState, isValid: boolean) => void;
   onSave?: DecisionSaveHandler;
 }
 
-export function DecisionChecklist({ onSave }: DecisionChecklistProps) {
+export function DecisionChecklist({
+  onDraftChange,
+  onSave,
+}: DecisionChecklistProps) {
   const {
     editDecision,
     editQuestion,
@@ -63,6 +68,10 @@ export function DecisionChecklist({ onSave }: DecisionChecklistProps) {
     status,
   } = useDecisionChecklist(onSave);
   const isSaving = status === "saving";
+
+  useEffect(() => {
+    onDraftChange?.(form, isValid);
+  }, [form, isValid, onDraftChange]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

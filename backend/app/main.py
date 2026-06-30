@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.api.company import router as company_router
 from app.api.home import router as home_router
+from app.api.journal import router as journal_router
 from app.api.watchlist import router as watchlist_router
 from app.core.exceptions import ApplicationException
 from app.database.database import initialize_database
@@ -49,6 +50,7 @@ app.add_middleware(
 )
 app.include_router(company_router)
 app.include_router(home_router)
+app.include_router(journal_router)
 app.include_router(watchlist_router)
 
 

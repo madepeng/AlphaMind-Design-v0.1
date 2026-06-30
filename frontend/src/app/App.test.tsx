@@ -13,6 +13,10 @@ vi.mock("../pages/Home/HomePage", () => ({
   HomePage: () => <h1>Home Dashboard</h1>,
 }));
 
+vi.mock("../pages/Journal/JournalPage", () => ({
+  JournalPage: () => <h1>Journal Page</h1>,
+}));
+
 vi.mock("../pages/Watchlist/WatchlistPage", () => ({
   WatchlistPage: () => <h1>Watchlist Page</h1>,
 }));
@@ -53,6 +57,18 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", { name: "Company Page" }),
+    ).toBeInTheDocument();
+  });
+
+  it("routes to Journal", () => {
+    render(
+      <MemoryRouter initialEntries={["/journal"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Journal Page" }),
     ).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { CompanyAISummary } from "../../components/cards/CompanyAISummary";
 import { CompanyHeaderCard } from "../../components/cards/CompanyHeaderCard";
@@ -12,7 +12,9 @@ import { PrimaryButton } from "../../components/common/PrimaryButton";
 import { Toast } from "../../components/common/Toast";
 import { AppLayout } from "../../components/layout/AppLayout";
 import { useCompany } from "../../hooks/useCompany";
+import { useJournalSave } from "../../hooks/useJournalSave";
 import type { CompanyAISummaryDTO } from "../../types/company";
+import type { DecisionFormState } from "../../types/decision";
 import {
   CompanyLoadingView,
   CompanySummaryLoadingView,
@@ -20,8 +22,19 @@ import {
 
 export function CompanyPage() {
   const { ticker = "" } = useParams();
+  const navigate = useNavigate();
   const { retry, state } = useCompany(ticker);
-  const [showJournalNotice, setShowJournalNotice] = useState(false);
+  const { save: saveJournal, status: journalStatus } = useJournalSave();
+  const [decisionDraft, setDecisionDraft] =
+    useState<DecisionFormState | null>(null);
+  const [isDecisionValid, setDecisionValid] = useState(false);
+  const handleDraftChange = useCallback(
+    (draft: DecisionFormState, isValid: boolean) => {
+      setDecisionDraft(draft);
+      setDecisionValid(isValid);
+    },
+    [],
+  );
 
   if (state.status === "loading") {
     return (
@@ -107,7 +120,7 @@ export function CompanyPage() {
           Decision Checklist
         </h2>
         <div className="mt-4">
-          <DecisionChecklist />
+          <DecisionChecklist onDraftChange={handleDraftChange} />
         </div>
       </section>
 
@@ -115,12 +128,31 @@ export function CompanyPage() {
         <h2 className="text-lg font-semibold" id="journal-heading">
           Journal Shortcut
         </h2>
-        <PrimaryButton className="mt-4" onClick={() => setShowJournalNotice(true)}>
-          Save Journal
+        <PrimaryButton
+          className="mt-4"
+          disabled={!isDecisionValid || journalStatus === "saving"}
+          onClick={async () => {
+            if (!decisionDraft) {
+              return;
+            }
+            const saved = await saveJournal({
+              ticker: header.ticker,
+              summary: null,
+              ...decisionDraft,
+              note: null,
+            });
+            if (saved) {
+              navigate("/journal");
+            }
+          }}
+        >
+          {journalStatus === "saving" ? "Saving..." : "Save Journal"}
         </PrimaryButton>
       </section>
 
-      {showJournalNotice ? <Toast message="Coming Soon" /> : null}
+      {journalStatus === "error" ? (
+        <Toast message="Failed to save journal." tone="error" />
+      ) : null}
     </AppLayout>
   );
 }

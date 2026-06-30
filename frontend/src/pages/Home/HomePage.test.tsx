@@ -124,7 +124,10 @@ describe("HomePage", () => {
       "href",
       "/watchlist",
     );
-    expect(screen.getByRole("button", { name: "Journal" })).toBeDisabled();
+    expect(screen.getByRole("link", { name: "Journal" })).toHaveAttribute(
+      "href",
+      "/journal",
+    );
     expect(screen.getByRole("button", { name: "Settings" })).toBeDisabled();
   });
 });

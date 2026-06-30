@@ -3,9 +3,10 @@ import { NavLink } from "react-router-dom";
 const enabledItems = [
   { label: "Home", to: "/" },
   { label: "Watchlist", to: "/watchlist" },
+  { label: "Journal", to: "/journal" },
 ];
 
-const disabledItems = ["Journal", "Settings"];
+const disabledItems = ["Settings"];
 
 export function Sidebar() {
   return (

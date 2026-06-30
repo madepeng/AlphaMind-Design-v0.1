@@ -4,11 +4,19 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getCompany } from "../../api/companyApi";
+import { createJournal } from "../../api/journalApi";
 import type { CompanyDTO } from "../../types/company";
 import { CompanyPage } from "./CompanyPage";
 
 vi.mock("../../api/companyApi", () => ({
   getCompany: vi.fn(),
+}));
+
+vi.mock("../../api/journalApi", () => ({
+  createJournal: vi.fn(),
+  deleteJournal: vi.fn(),
+  getJournal: vi.fn(),
+  getJournals: vi.fn(),
 }));
 
 const company: CompanyDTO = {
@@ -37,12 +45,22 @@ const company: CompanyDTO = {
 };
 
 const mockedGetCompany = vi.mocked(getCompany);
+const mockedCreateJournal = vi.mocked(createJournal);
+
+function deferredSave() {
+  let resolvePromise: () => void = () => undefined;
+  const promise = new Promise<void>((resolve) => {
+    resolvePromise = resolve;
+  });
+  return { promise, resolve: resolvePromise };
+}
 
 function renderCompany() {
   return render(
     <MemoryRouter initialEntries={["/company/NVDA"]}>
       <Routes>
         <Route path="/company/:ticker" element={<CompanyPage />} />
+        <Route path="/journal" element={<h1>Journal Page</h1>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -53,6 +71,7 @@ afterEach(cleanup);
 describe("CompanyPage", () => {
   beforeEach(() => {
     mockedGetCompany.mockReset();
+    mockedCreateJournal.mockReset();
   });
 
   it("renders the loading state", () => {
@@ -121,20 +140,61 @@ describe("CompanyPage", () => {
     expect(screen.getByLabelText("Question 5")).toBeEnabled();
   });
 
-  it("keeps checklist values local and shows Coming Soon for Save Journal", async () => {
+  it("saves the current checklist to Journal and navigates", async () => {
     mockedGetCompany.mockResolvedValue(company);
+    const pending = deferredSave();
+    mockedCreateJournal.mockReturnValue(pending.promise);
 
     renderCompany();
 
-    const question = await screen.findByLabelText("Question 1");
-    fireEvent.change(question, { target: { value: "Review earnings" } });
+    await screen.findByLabelText("Question 1");
+    for (let index = 1; index <= 4; index += 1) {
+      fireEvent.change(screen.getByLabelText(`Question ${index}`), {
+        target: { value: `Answer ${index}` },
+      });
+    }
     fireEvent.change(screen.getByLabelText("Question 5"), {
-      target: { value: "Watch" },
+      target: { value: "Hold" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Save Journal" }));
 
-    expect(question).toHaveValue("Review earnings");
-    expect(screen.getByLabelText("Question 5")).toHaveValue("Watch");
-    expect(screen.getByRole("status")).toHaveTextContent("Coming Soon");
+    expect(screen.getByRole("button", { name: "Saving..." })).toBeDisabled();
+    pending.resolve();
+
+    expect(
+      await screen.findByRole("heading", { name: "Journal Page" }),
+    ).toBeInTheDocument();
+    expect(mockedCreateJournal).toHaveBeenCalledWith({
+      ticker: "NVDA",
+      summary: null,
+      reason: "Answer 1",
+      bullCase: "Answer 2",
+      risk: "Answer 3",
+      exitPlan: "Answer 4",
+      decision: "Hold",
+      note: null,
+    });
+  });
+
+  it("keeps Save Journal disabled until valid and shows save errors", async () => {
+    mockedGetCompany.mockResolvedValue(company);
+    mockedCreateJournal.mockRejectedValue(new Error("Unavailable"));
+
+    renderCompany();
+
+    const saveButton = await screen.findByRole("button", {
+      name: "Save Journal",
+    });
+    expect(saveButton).toBeDisabled();
+    for (let index = 1; index <= 4; index += 1) {
+      fireEvent.change(screen.getByLabelText(`Question ${index}`), {
+        target: { value: `Answer ${index}` },
+      });
+    }
+    fireEvent.click(saveButton);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Failed to save journal.",
+    );
   });
 });
