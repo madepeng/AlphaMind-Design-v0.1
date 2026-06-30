@@ -134,15 +134,19 @@ Refresh
 
 # Search
 
+Version1
+
 支持：
 
 Ticker
 
-Company Name
-
 Date
 
 模糊搜索。
+
+Company Name 不保存到数据库。
+
+Company Name 通过 Ticker 动态映射显示。
 
 实时过滤。
 
@@ -184,6 +188,16 @@ Decision
 
 Summary
 
+Version1
+
+summary 允许为空。
+
+如果为空：
+
+显示：
+
+No AI Summary Yet.
+
 例如：
 
 2026-06-30
@@ -192,7 +206,7 @@ MU
 
 Hold
 
-HBM demand remains strong.
+No AI Summary Yet.
 
 ---
 
@@ -213,6 +227,18 @@ Date
 ---
 
 AI Summary
+
+Version1
+
+允许为空。
+
+如果为空：
+
+显示：
+
+No AI Summary Yet.
+
+T008 接入 OpenAI 后再写入真实 AI Summary。
 
 ---
 
@@ -297,6 +323,10 @@ Retry。
 GET
 
 /api/v1/journal
+
+GET
+
+/api/v1/journal/{id}
 
 POST
 
@@ -383,6 +413,8 @@ Error
 重启后数据仍存在。
 
 Version 1 即视为完成。
+
+summary 为空时页面正常显示。
 
 ---
 

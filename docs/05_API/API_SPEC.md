@@ -313,18 +313,76 @@ Description
 
 按 created_at 倒序。
 
+Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "ticker": "NVDA",
+      "summary": null,
+      "reason": "...",
+      "bullCase": "...",
+      "risk": "...",
+      "exitPlan": "...",
+      "decision": "Hold",
+      "note": "...",
+      "createdAt": "2026-06-30T12:00:00",
+      "updatedAt": "2026-06-30T12:00:00"
+    }
+  ]
+}
+
 ---
+
+
+### B. 在 `GET /api/v1/journal` 后面新增详情接口
+
+```markdown
+## GET
+
+/api/v1/journal/{id}
+
+Description
+
+获取单条 Journal 详情。
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "ticker": "NVDA",
+    "summary": null,
+    "reason": "...",
+    "bullCase": "...",
+    "risk": "...",
+    "exitPlan": "...",
+    "decision": "Hold",
+    "note": "...",
+    "createdAt": "2026-06-30T12:00:00",
+    "updatedAt": "2026-06-30T12:00:00"
+  }
+}
 
 ## POST
 
 /api/v1/journal
 
+
+### C. 把 `POST /api/v1/journal` 的 Request 改成：
+
+```
 Request
 
 ```json
 {
   "ticker": "NVDA",
-  "summary": "...",
+  "summary": null,
   "reason": "...",
   "bullCase": "...",
   "risk": "...",

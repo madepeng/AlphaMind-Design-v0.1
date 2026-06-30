@@ -124,7 +124,7 @@ Columns
 |---------|------|----------|-------------|
 | id | INTEGER | No | Primary Key |
 | ticker | TEXT | No | 股票代码 |
-| summary | TEXT | No | AI Summary |
+| summary | TEXT | Yes | AI Summary，T008 接入 OpenAI 前允许为空 |
 | reason | TEXT | No | 为什么今天研究 |
 | bull_case | TEXT | No | 最大利好 |
 | risk | TEXT | No | 最大风险 |
