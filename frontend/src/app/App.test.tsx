@@ -1,25 +1,26 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
-vi.mock("../api/healthApi", () => ({
-  getHealth: vi.fn(() =>
-    Promise.resolve({ status: "ok", app: "AlphaMind OS" }),
-  ),
+vi.mock("../pages/Home/HomePage", () => ({
+  HomePage: () => <h1>Home Dashboard</h1>,
 }));
 
-describe("App", () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+afterEach(cleanup);
 
-  it("shows a successful backend connection", async () => {
-    render(<App />);
+describe("App", () => {
+  it("uses Home as the default page", () => {
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <App />
+      </MemoryRouter>,
+    );
 
     expect(
-      await screen.findByText("Frontend and backend are connected."),
+      screen.getByRole("heading", { name: "Home Dashboard" }),
     ).toBeInTheDocument();
   });
 });
