@@ -56,9 +56,15 @@ Decision Checklist 是 AlphaMind 的核心功能。
 
 Company 页面。
 
-AI Summary 加载完成后。
+进入 Company 页面后：
 
-Checklist 自动解锁。
+Decision Checklist 可直接编辑。
+
+Version1
+
+AI Summary 为 Mock，不作为解锁条件。
+
+未来接入 OpenAI（T008）后，可根据需要重新调整交互。
 
 ---
 
