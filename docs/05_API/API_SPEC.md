@@ -211,19 +211,27 @@ Response
 {
   "success": true,
   "data": {
-    "ticker": "NVDA",
-    "companyName": "NVIDIA",
-    "industry": "Semiconductor",
-    "marketCap": "3.8T",
-    "price": 185.23,
-    "changePercent": 1.82,
+    "header": {
+      "ticker": "NVDA",
+      "companyName": "NVIDIA",
+      "industry": "Semiconductor",
+      "marketCap": "3.8T",
+      "price": 185.23,
+      "changePercent": 1.82
+    },
     "news": [
       {
-        "title": "NVIDIA launches new AI chips",
-        "publishedAt": "2026-06-30"
+        "title": "...",
+        "publishedAt": "2026-06-30",
+        "source": "Mock News"
       }
     ],
-    "earningsSummary": "Revenue increased 48% YoY."
+    "aiSummary": {
+      "summary": "...",
+      "bullCase": ["..."],
+      "risk": ["..."],
+      "watchItems": ["..."]
+    }
   }
 }
 ```

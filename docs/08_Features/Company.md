@@ -257,11 +257,15 @@ Watch
 
 Journal Shortcut
 
+Version1
+
+仅显示按钮。
+
 点击：
 
-Save Journal
+Coming Soon
 
-自动保存：
+Journal 保存将在 T007 实现。
 
 AI Summary
 
