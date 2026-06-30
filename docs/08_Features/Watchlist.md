@@ -182,15 +182,9 @@ Current Price
 
 Today's Change
 
-点击：
+点击 Company Card：
 
-Coming Soon
-
-Version1
-
-不进入 Company。
-
-Company 页面将在 T005 实现。
+进入 Company 页面。
 
 ---
 
@@ -326,11 +320,8 @@ Empty
 
 搜索。
 
-点击股票后显示 Coming Soon。
+点击股票后进入 Company。
 
-T004 不进入 Company。
-
-Company 页面将在 T005 实现。
 
 数据保存。
 

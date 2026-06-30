@@ -63,7 +63,7 @@ Version1
 
 Home：Enabled
 
-Watchlist：Enabled（T004）
+Watchlist：Enabled
 
 Journal：Disabled
 
