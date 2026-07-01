@@ -1,6 +1,6 @@
 {
   "name": "@alphamind/frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
@@ -9,6 +9,7 @@
     "dev:web": "vite --host 127.0.0.1",
     "dev:electron": "wait-on http://127.0.0.1:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron electron/main.cjs",
     "build": "tsc -b && vite build",
+    "build:mac": "../scripts/build-macos-x64.sh",
     "lint": "eslint .",
     "test": "vitest run",
     "start": "electron electron/main.cjs"
@@ -32,6 +33,7 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^42.5.1",
+    "electron-builder": "26.15.3",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.26",
@@ -43,5 +45,50 @@
     "vite": "^8.1.0",
     "vitest": "^4.0.18",
     "wait-on": "^9.0.4"
+  },
+  "build": {
+    "appId": "com.alphamind.os",
+    "productName": "AlphaMind",
+    "asar": true,
+    "directories": {
+      "buildResources": "build",
+      "output": "release-build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/dist/alphamind-backend",
+        "to": "backend"
+      },
+      {
+        "from": "dist",
+        "to": "frontend"
+      },
+      {
+        "from": "build/database",
+        "to": "database"
+      },
+      {
+        "from": "build/logs",
+        "to": "logs"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "build/AlphaMind.icns",
+      "identity": null,
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
   }
 }

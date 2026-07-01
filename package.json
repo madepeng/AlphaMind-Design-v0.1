@@ -1,12 +1,13 @@
 {
   "name": "alphamind-os",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@11.7.0",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
+    "build:mac": "scripts/build-macos-x64.sh",
     "dev": "concurrently --kill-others --names backend,desktop \"pnpm dev:backend\" \"pnpm dev:frontend\"",
     "dev:backend": "cd backend && uv run uvicorn app.main:app --reload",
     "dev:frontend": "pnpm --dir frontend dev",
