@@ -4,9 +4,8 @@ const enabledItems = [
   { label: "Home", to: "/" },
   { label: "Watchlist", to: "/watchlist" },
   { label: "Journal", to: "/journal" },
+  { label: "Settings", to: "/settings" },
 ];
-
-const disabledItems = ["Settings"];
 
 export function Sidebar() {
   return (
@@ -30,16 +29,6 @@ export function Sidebar() {
           >
             {item.label}
           </NavLink>
-        ))}
-        {disabledItems.map((item) => (
-          <button
-            className="flex h-10 w-full cursor-not-allowed items-center rounded-lg px-3 text-left text-sm text-[#9CA3AF] opacity-50"
-            disabled
-            key={item}
-            type="button"
-          >
-            {item}
-          </button>
         ))}
       </nav>
     </aside>

@@ -17,6 +17,10 @@ vi.mock("../pages/Journal/JournalPage", () => ({
   JournalPage: () => <h1>Journal Page</h1>,
 }));
 
+vi.mock("../pages/Settings/SettingsPage", () => ({
+  SettingsPage: () => <h1>Settings Page</h1>,
+}));
+
 vi.mock("../pages/Watchlist/WatchlistPage", () => ({
   WatchlistPage: () => <h1>Watchlist Page</h1>,
 }));
@@ -69,6 +73,18 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", { name: "Journal Page" }),
+    ).toBeInTheDocument();
+  });
+
+  it("routes to Settings", () => {
+    render(
+      <MemoryRouter initialEntries={["/settings"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Settings Page" }),
     ).toBeInTheDocument();
   });
 });

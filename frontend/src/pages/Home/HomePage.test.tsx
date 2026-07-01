@@ -128,6 +128,9 @@ describe("HomePage", () => {
       "href",
       "/journal",
     );
-    expect(screen.getByRole("button", { name: "Settings" })).toBeDisabled();
+    expect(screen.getByRole("link", { name: "Settings" })).toHaveAttribute(
+      "href",
+      "/settings",
+    );
   });
 });

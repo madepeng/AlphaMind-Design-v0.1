@@ -6,8 +6,9 @@ import pytest
 from app.ai import AIService
 from app.api.analyze import get_ai_service
 from app.config.settings import AppSettings
-from app.core.exceptions import ExternalAPIException
+from app.core.exceptions import ConfigurationException, ExternalAPIException
 from app.main import app
+from app.models import SettingsModel
 from app.schemas.company import CompanyAISummaryDTO
 
 ANALYSIS = CompanyAISummaryDTO(
@@ -25,6 +26,15 @@ class StubAIService(AIService):
     async def CompanyAnalysis(self, ticker: str) -> CompanyAISummaryDTO:
         assert ticker == "NVDA"
         return ANALYSIS
+
+
+class StubSettingsReader:
+    def __init__(self, values: dict[str, str]) -> None:
+        self.values = values
+
+    async def get_by_key(self, key: str) -> SettingsModel | None:
+        value = self.values.get(key)
+        return SettingsModel(key=key, value=value) if value else None
 
 
 @pytest.fixture
@@ -116,6 +126,63 @@ async def test_ai_service_calls_responses_api_and_parses_output() -> None:
         ).CompanyAnalysis("NVDA")
 
     assert result == ANALYSIS
+
+
+@pytest.mark.asyncio
+async def test_ai_service_prefers_database_configuration() -> None:
+    def handle_request(request: httpx.Request) -> httpx.Response:
+        assert request.headers["authorization"] == "Bearer database-key"
+        assert '"model":"database-model"' in request.read().decode()
+        return httpx.Response(
+            200,
+            json={
+                "status": "completed",
+                "output": [
+                    {
+                        "type": "message",
+                        "content": [
+                            {
+                                "type": "output_text",
+                                "text": ANALYSIS.model_dump_json(),
+                            }
+                        ],
+                    }
+                ],
+            },
+        )
+
+    settings = AppSettings(
+        openai_api_key="environment-key",
+        openai_model="environment-model",
+    )
+    reader = StubSettingsReader(
+        {
+            "OPENAI_API_KEY": "database-key",
+            "OPENAI_MODEL": "database-model",
+        }
+    )
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(handle_request)
+    ) as client:
+        result = await AIService(
+            client=client,
+            settings=settings,
+            settings_repository=reader,
+        ).CompanyAnalysis("NVDA")
+
+    assert result == ANALYSIS
+
+
+@pytest.mark.asyncio
+async def test_ai_service_rejects_missing_configuration() -> None:
+    settings = AppSettings(openai_api_key=None, openai_model="")
+    service = AIService(
+        settings=settings,
+        settings_repository=StubSettingsReader({}),
+    )
+
+    with pytest.raises(ConfigurationException, match="Configuration Error"):
+        await service.CompanyAnalysis("NVDA")
 
 
 @pytest.mark.asyncio

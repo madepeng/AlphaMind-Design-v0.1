@@ -1,14 +1,17 @@
 import json
+from dataclasses import dataclass
 from time import perf_counter
-from typing import Any
+from typing import Any, Protocol
 
 import httpx
 import structlog
 from pydantic import ValidationError
 
 from app.config.settings import AppSettings, get_settings
-from app.core.exceptions import ExternalAPIException
+from app.core.exceptions import ConfigurationException, ExternalAPIException
+from app.models import SettingsModel
 from app.schemas.company import CompanyAISummaryDTO
+from app.services.settings import OPENAI_API_KEY, OPENAI_MODEL
 
 logger = structlog.get_logger()
 
@@ -47,25 +50,35 @@ ANALYSIS_SCHEMA: dict[str, Any] = {
 }
 
 
+class SettingsReader(Protocol):
+    async def get_by_key(self, key: str) -> SettingsModel | None: ...
+
+
+@dataclass(frozen=True)
+class AIConfiguration:
+    api_key: str
+    model: str
+
+
 class AIService:
     def __init__(
         self,
         client: httpx.AsyncClient | None = None,
         settings: AppSettings | None = None,
+        settings_repository: SettingsReader | None = None,
     ) -> None:
         self.client = client
         self.settings = settings or get_settings()
+        self.settings_repository = settings_repository
 
     async def CompanyAnalysis(self, ticker: str) -> CompanyAISummaryDTO:
-        api_key = self.settings.openai_api_key
-        if api_key is None or not api_key.get_secret_value():
-            raise ExternalAPIException("AI analysis unavailable.")
+        configuration = await self._get_configuration()
 
         started_at = perf_counter()
         try:
             payload = await self._create_response(
                 ticker,
-                api_key.get_secret_value(),
+                configuration,
             )
             analysis = self._parse_analysis(payload)
         except (
@@ -94,10 +107,10 @@ class AIService:
     async def _create_response(
         self,
         ticker: str,
-        api_key: str,
+        configuration: AIConfiguration,
     ) -> dict[str, Any]:
         request = {
-            "model": self.settings.openai_model,
+            "model": configuration.model,
             "instructions": (
                 "You are an investment research assistant, not a financial "
                 "advisor. Give balanced, concise research context. Do not "
@@ -117,7 +130,7 @@ class AIService:
             },
         }
         headers = {
-            "Authorization": f"Bearer {api_key}",
+            "Authorization": f"Bearer {configuration.api_key}",
             "Content-Type": "application/json",
         }
 
@@ -142,6 +155,27 @@ class AIService:
         if not isinstance(payload, dict):
             raise TypeError("OpenAI response must be an object")
         return payload
+
+    async def _get_configuration(self) -> AIConfiguration:
+        database_api_key = await self._get_database_value(OPENAI_API_KEY)
+        database_model = await self._get_database_value(OPENAI_MODEL)
+        environment_api_key = self.settings.openai_api_key
+        api_key = database_api_key or (
+            environment_api_key.get_secret_value()
+            if environment_api_key is not None
+            else ""
+        )
+        if not api_key:
+            raise ConfigurationException("Configuration Error")
+
+        model = database_model or self.settings.openai_model or "gpt-5.5"
+        return AIConfiguration(api_key=api_key, model=model)
+
+    async def _get_database_value(self, key: str) -> str:
+        if self.settings_repository is None:
+            return ""
+        model = await self.settings_repository.get_by_key(key)
+        return model.value.strip() if model and model.value else ""
 
     @staticmethod
     def _parse_analysis(payload: dict[str, Any]) -> CompanyAISummaryDTO:

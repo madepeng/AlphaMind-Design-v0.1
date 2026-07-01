@@ -15,6 +15,12 @@ class SettingsRepository:
     async def get(self, model_id: int) -> SettingsModel | None:
         return await self.session.get(SettingsModel, model_id)
 
+    async def get_by_key(self, key: str) -> SettingsModel | None:
+        result = await self.session.exec(
+            select(SettingsModel).where(SettingsModel.key == key)
+        )
+        return result.one_or_none()
+
     async def list(self) -> list[SettingsModel]:
         result = await self.session.exec(select(SettingsModel))
         return list(result.all())

@@ -12,6 +12,7 @@ from app.api.analyze import router as analyze_router
 from app.api.company import router as company_router
 from app.api.home import router as home_router
 from app.api.journal import router as journal_router
+from app.api.settings import router as settings_router
 from app.api.watchlist import router as watchlist_router
 from app.core.exceptions import ApplicationException
 from app.database.database import initialize_database
@@ -46,13 +47,14 @@ app.add_middleware(
         "null",
     ],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 app.include_router(analyze_router)
 app.include_router(company_router)
 app.include_router(home_router)
 app.include_router(journal_router)
+app.include_router(settings_router)
 app.include_router(watchlist_router)
 
 

@@ -20,3 +20,7 @@ class NotFoundException(ApplicationException):
 
 class ExternalAPIException(ApplicationException):
     status_code = 500
+
+
+class ConfigurationException(ApplicationException):
+    pass
